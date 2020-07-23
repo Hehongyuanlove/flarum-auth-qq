@@ -1,0 +1,41 @@
+{
+  "name": "hehongyuanlove/flarum-auth-qq",
+  "description": "Allow users to log in with QQ",
+  "keywords": [
+    "flarum",
+    "authentication",
+    "QQ"
+  ],
+  "type": "flarum-extension",
+  "license": "MIT",
+  "require": {
+    "flarum/core": ">=0.1.0-beta.12 <0.1.0-beta.14",
+    "league/oauth2-client": "^2.2",
+    "ext-json": "*"
+  },
+  "authors": [
+    {
+      "name": "YC",
+      "email": "1016823618@qq.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Hehongyuanlove\\AuthQQ\\": "src/"
+    }
+  },
+  "extra": {
+    "flarum-extension": {
+      "title": "QQ Auth Login by Hehongyuanlove",
+      "icon": {
+        "name": "fa fa-qq",
+        "backgroundColor": "#14baf8",
+        "color": "#fff"
+      }
+    },
+    "flagrow": {
+      "discuss": ""
+    }
+  }
+}
