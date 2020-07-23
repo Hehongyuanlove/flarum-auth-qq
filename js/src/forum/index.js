@@ -4,6 +4,7 @@ import LogInButtons from 'flarum/components/LogInButtons'
 import LogInButton from 'flarum/components/LogInButton'
 
 app.initializers.add('hehongyuanlove/flarum-auth-qq', () => {
+  console.log('[hehongyuanlove/flarum-auth-qq] Hello, admin!')
   extend(LogInButtons.prototype, 'items', function(items) {
     items.add(
       'QQ',
