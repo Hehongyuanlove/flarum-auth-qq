@@ -1,5 +1,5 @@
 {
-  "name": "@hehongyuanlove/auth-qq",
+  "name": "@hehongyuanlove/flarum-auth-qq",
   "version": "0.0.0",
   "private": true,
   "dependencies": {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of hehongyuanlove/auth-qq.
+ * This file is part of hehongyuanlove/flarum-auth-qq.
  *
  * Copyright (c) 2020 YC.
  *
