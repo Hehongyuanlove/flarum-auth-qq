@@ -8,7 +8,7 @@ app.initializers.add('hehongyuanlove/flarum-auth-qq', () => {
     items.add(
       'QQ',
       <LogInButton className="Button LogInButton--QQ" icon="fa fa-qq" path="/auth/qq">
-        {app.translator.trans('hehongyuanlove/flarum-auth-qq.forum.log_in.with_qq_button')}
+        {app.translator.trans('hehongyuanlove-auth-qq.forum.log_in.with_qq_button')}
       </LogInButton>
     )
   })
