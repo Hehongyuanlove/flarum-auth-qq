@@ -27,9 +27,9 @@
   },
   "extra": {
     "flarum-extension": {
-      "title": "QQ Auth Login by Hehongyuanlove",
+      "title": "QQ Login",
       "icon": {
-        "name": "fa fa-qq",
+        "name": "fab fa-qq",
         "backgroundColor": "#14baf8",
         "color": "#fff"
       }
