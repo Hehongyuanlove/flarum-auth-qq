@@ -45,25 +45,26 @@ class QQAuthController implements RequestHandlerInterface {
      * @throws Exception
      */
     public function handle(Request  $request): ResponseInterface {
-        $redirectUri = $this->url->to('forum')->route('auth.qq');
+        $redirectUri = 'https:'.$this->url->to('forum')->route('auth.qq');
         
         $provider   = new QQ([
-            'clientId'          => $this->settings->get('hehgonyuanlove-auth-qq.client_id'),
-            'clientSecret'      => $this->settings->get('hehgonyuanlove-auth-qq.client_secret'),
+            'clientId'          => $this->settings->get('hehongyuanlove-auth-qq.client_id'),
+            'clientSecret'      => $this->settings->get('hehongyuanlove-auth-qq.client_secret'),
             'redirectUri'       => $redirectUri,
         ]);
+      
         $session        = $request->getAttribute('session');
         $queryParams    = $request->getQueryParams();
         $code           = array_get($queryParams, 'code');
-        // 1. 获取Authorization Code 
+
         if (!$code) {
             $authUrl    = $provider->getAuthorizationUrl();
             $session->put('oauth2state', $provider->getState());
             return new RedirectResponse($authUrl);
         }
         $state          = array_get($queryParams, 'state');
-        var_dump($queryParams);
-        die;
+        
+        
         if (!$state || $state !== $session->get('oauth2state')) {
             $session->remove('oauth2state');
             throw new Exception('Invalid state');
@@ -71,16 +72,20 @@ class QQAuthController implements RequestHandlerInterface {
         $token          = $provider->getAccessToken('authorization_code', [
             "code"  => $code,
         ]);
+      
         $user           = $provider->fetchOpenid($token);
-
+     
+        $userinfo = $provider->fetchUesrInfo($token,$user['openid']);
+       
+		$userinforesult = array_merge_recursive($user, $userinfo); 
         return $this->response->make(
-            'QQ', $user["id"],
-            function (Registration $registration) use ($user) {
+            'QQ', $userinforesult["openid"],
+            function (Registration $registration) use ($userinforesult) {
                 $registration
                     ->suggestEmail("")
-                    ->provideAvatar($user['avatar_hd'])
-                    ->suggestUsername($user["name"])
-                    ->setPayload($user);
+                    ->provideAvatar($userinforesult['figureurl_qq_2'])
+                    ->suggestUsername($userinforesult["nickname"])
+                    ->setPayload($userinforesult);
             }
         );
     }
