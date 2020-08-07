@@ -33,8 +33,6 @@ class QQ extends AbstractProvider
     return $this->domain . '/oauth2.0/authorize';
   }
 
-
-
   protected function getAuthorizationParameters(array $options)
   {
     $options['client_id'] = $this->clientId;
@@ -98,7 +96,7 @@ class QQ extends AbstractProvider
   /**
    * Get openid
    *
-   * @param AccessToken $token 
+   * @param AccessToken $token
    * @return mixed
    * @throws IdentityProviderException
    */
@@ -110,13 +108,7 @@ class QQ extends AbstractProvider
     return $data;
   }
 
-  /**
-   * Get openid
-   *
-   * @param  $token  $openid
-   * @return mixed
-   * @throws IdentityProviderException
-   */
+
   public function fetchUesrInfo($token, $openid)
   {
     $url     = $this->domain . '/user/get_user_info?access_token=' . $token . '&oauth_consumer_key=' . $this->clientId . '&openid=' . $openid;
@@ -150,7 +142,6 @@ class QQ extends AbstractProvider
     $params   = $grant->prepareRequestParameters($params, $options);
     $request  = $this->getAccessTokenRequest($params);
     $response = $this->getParsedResponse($request);
-
     if (is_null($response)) {
       throw new \UnexpectedValueException(
         'Invalid response received from Authorization Server. Expected JSON.'
@@ -161,7 +152,6 @@ class QQ extends AbstractProvider
     $token    = $this->createAccessToken($prepared, $grant);
     return $token;
   }
-
 
   /**
    * @param RequestInterface $request
