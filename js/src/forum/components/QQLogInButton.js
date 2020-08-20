@@ -1,7 +1,7 @@
 import Button from 'flarum/components/Button'
 
 /**
- * The `LogInButton` component displays a social login button which will open
+ * The `QQLogInButton` component displays a social login button which will open
  * a popup window containing the specified path.
  *
  * ### Props
@@ -10,8 +10,7 @@ import Button from 'flarum/components/Button'
  */
 export default class QQLogInButton extends Button {
   init() {
-    this.auths = null
-
+    this.authsQQ = null
     super.init()
   }
 
@@ -21,22 +20,16 @@ export default class QQLogInButton extends Button {
     return super.view()
   }
 
-  // static initProps(props) {
-  //   props.className = (props.className || '') + ' LogInButton'
-
-  //   props.onclick = function() {
-  //     this.checkH5()
-  //   }
-
-  //   super.initProps(props)
-  // }
-
   checkH5() {
     if (navigator.userAgent.indexOf('Html5Plus') > -1) {
       this.loading = true
       plus.oauth.getServices(
         services => {
-          this.auths = services
+          for (var i in services) {
+            if (services[i].id == 'qq') {
+              this.authsQQ = services[i]
+            }
+          }
           this.authLogin()
         },
         e => {
@@ -57,13 +50,13 @@ export default class QQLogInButton extends Button {
   }
 
   authLogin() {
-    var s = this.auths[0]
+    var s = this.authsQQ
     // if (!s.authResult) {
     s.login(
       e => {
         // 获取登录操作结果
         var result = e.target.authResult
-        //alert('登录认证成功：' + JSON.stringify(result))
+        // alert('登录认证成功：' + JSON.stringify(result))
 
         this.authUserInfo()
       },
@@ -92,38 +85,40 @@ export default class QQLogInButton extends Button {
   }
   // 获取登录用户信息操作
   authUserInfo() {
-    var s = this.auths[0]
+    var s = this.authsQQ
     if (!s.authResult) {
       alert('未登录授权！')
     } else {
       s.getUserInfo(
         e => {
           // alert('获取用户信息成功：' + JSON.stringify(s.userInfo))
-
+          var pload = {
+            openid: s.authResult.openid,
+            access_token: s.authResult.access_token,
+            pay_token: s.authResult.pay_token,
+            nickname: s.userInfo.nickname,
+            figureurl_qq_2: s.userInfo.figureurl_qq_2
+          }
           //拿到用户信息，进行相关处理，ajax传用户数据到服务器等
-          var prame = JSON.stringify(s.userInfo)
-          // fl.himi3d.cn/api/authh5/qq?param={"openid":"sd;fslkdf"}
+          var prame = escape(JSON.stringify(pload))
+
           m.request({
             method: 'GET',
             url: '/api/authh5/qq?param=' + prame,
             deserialize: function(value) {
               return value
             }
-            //params: { prame: JSON.stringify(s.userInfo) }
-          }).then(result => {
-            result = result.replace('window.close();', '')
-            result = result.replace('.opener', '')
-            result = result.replace('<script>', '')
-            result = result.replace(';</script>', '')
-            // console.log(result)
-            eval(result)
-            // m.mount(document.body, result)
-            // window.app.authenticationComplete({ avatar_url: 'www.baidu.com', email: '', username: 'YCCSDA', token: 'sqGHPhfbIMHUGICbX2G7l5t3g3jrQWH5p3NJ3JnB', provided: ['avatar_url'] })
           })
-
-          // console.log('/api/authh5/qq?param=' + prame)
-          // console.log(app.forum.attribute('baseUrl'))
-          // window.open(app.forum.attribute('baseUrl') + '/api/authh5/qq?param=' + prame)
+            .then(result => {
+              result = result.replace('window.close();', '')
+              result = result.replace('.opener', '')
+              result = result.replace('<script>', '')
+              result = result.replace(';</script>', '')
+              eval(result)
+            })
+            .catch(err => {
+              console.log(err)
+            })
 
           // app
           //   .request({
@@ -131,8 +126,7 @@ export default class QQLogInButton extends Button {
           //     method: 'GET'
           //   })
           //   .then(res => {
-          //     console.log(11111111111111)
-          //     console.log(res)
+          //
           //     // m.mount(document.body, res)
           //   })
         },
