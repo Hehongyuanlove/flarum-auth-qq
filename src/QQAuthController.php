@@ -46,7 +46,7 @@ class QQAuthController implements RequestHandlerInterface {
      * @throws Exception
      */
     public function handle(Request  $request): ResponseInterface {
-        $redirectUri = 'https:'.$this->url->to('forum')->route('auth.qq');
+        $redirectUri = $this->url->to('forum')->route('auth.qq');
         
         $provider   = new QQ([
             'clientId'          => $this->settings->get('hehongyuanlove-auth-qq.client_id'),
