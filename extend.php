@@ -22,7 +22,7 @@ return [
     ->css(__DIR__ . '/resources/less/admin.less'),
 
   // new DefaultSettings(),
-  (new Extend\Routes('forum'))
+  (new Extend\Routes('api'))
     ->get('/auth/qq', 'auth.qq', QQAuthController::class),
 
   (new Extend\Routes('api'))

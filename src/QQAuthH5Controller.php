@@ -52,6 +52,8 @@ class QQAuthH5Controller implements RequestHandlerInterface
    */
   public function handle(Request  $request): ResponseInterface
   {
+      
+
 
     $param = Arr::get($request->getQueryParams(), 'param', null);
     if (!$param) {

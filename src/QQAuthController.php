@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\Response\RedirectResponse;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 class QQAuthController implements RequestHandlerInterface {
     /**
@@ -46,24 +47,27 @@ class QQAuthController implements RequestHandlerInterface {
      * @throws Exception
      */
     public function handle(Request  $request): ResponseInterface {
-        $redirectUri = $this->url->to('forum')->route('auth.qq');
+     
+        $redirectUri = $this->url->to('api')->route('auth.qq');
         
         $provider   = new QQ([
             'clientId'          => $this->settings->get('hehongyuanlove-auth-qq.client_id'),
             'clientSecret'      => $this->settings->get('hehongyuanlove-auth-qq.client_secret'),
             'redirectUri'       => $redirectUri,
         ]);
+        
+       
       
         $session        = $request->getAttribute('session');
         $queryParams    = $request->getQueryParams();
-        $code           = array_get($queryParams, 'code');
+        $code           = Arr::get($queryParams, 'code');
 
         if (!$code) {
             $authUrl    = $provider->getAuthorizationUrl();
             $session->put('oauth2state', $provider->getState());
             return new RedirectResponse($authUrl);
         }
-        $state          = array_get($queryParams, 'state');
+        $state          = Arr::get($queryParams, 'state');
         
         
         if (!$state || $state !== $session->get('oauth2state')) {

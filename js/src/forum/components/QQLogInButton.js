@@ -4,20 +4,22 @@ import Button from 'flarum/components/Button'
  * The `QQLogInButton` component displays a social login button which will open
  * a popup window containing the specified path.
  *
- * ### Props
+ * ### attrs
  *
  * - `path`
  */
 export default class QQLogInButton extends Button {
-  init() {
-    this.authsQQ = null
-    super.init()
+  static initAttrs(attrs) {
+    attrs.authsQQ = this.authsQQ
+    super.initAttrs(attrs);
   }
 
-  view() {
-    this.props.onclick = this.checkH5.bind(this)
-    this.props.className = (this.props.className || '') + ' LogInButton'
-    return super.view()
+  view(vnode) {
+
+    const vdom = super.view(vnode);
+    vdom.attrs.onclick = this.checkH5.bind(this)
+    vdom.attrs.className = (this.attrs.className || '') + ' LogInButton'
+    return vdom
   }
 
   checkH5() {
@@ -42,7 +44,7 @@ export default class QQLogInButton extends Button {
       const $window = $(window)
 
       window.open(
-        app.forum.attribute('baseUrl') + this.props.path,
+        app.forum.attribute('baseUrl') + this.attrs.path,
         'logInPopup',
         `width=${width},` + `height=${height},` + `top=${$window.height() / 2 - height / 2},` + `left=${$window.width() / 2 - width / 2},` + 'status=no,scrollbars=yes,resizable=no'
       )
