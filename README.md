@@ -4,7 +4,12 @@
 
 A [Flarum](http://flarum.org) extension. Allow users to log in with QQ
 
-### Installation
+### QQ互联回调地址
+
+- https://域名/api/auth/qq
+- https://域名/api/authh5/qq
+
+### 安装
 
 Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually with composer:
 
@@ -12,7 +17,7 @@ Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-mark
 composer require hehongyuanlove/flarum-auth-qq
 ```
 
-### Updating
+### 更新
 
 ```sh
 composer update hehongyuanlove/flarum-auth-qq
