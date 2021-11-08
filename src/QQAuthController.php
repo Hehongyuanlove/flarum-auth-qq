@@ -3,8 +3,10 @@ namespace Hehongyuanlove\AuthQQ;
 
 use Exception;
 use Flarum\Forum\Auth\Registration;
-use Flarum\Forum\Auth\ResponseFactory;
+// use Flarum\Forum\Auth\ResponseFactory;
+// use ResponseFactory;
 use Flarum\Http\UrlGenerator;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -34,7 +36,7 @@ class QQAuthController implements RequestHandlerInterface {
      * @param SettingsRepositoryInterface $settings
      * @param UrlGenerator $url
      */
-    public function __construct(ResponseFactory $response, SettingsRepositoryInterface $settings, UrlGenerator $url){
+    public function __construct(QQResponseFactory $response, SettingsRepositoryInterface $settings, UrlGenerator $url){
         $this->response = $response;
         $this->settings = $settings;
         $this->url      = $url;
@@ -48,8 +50,10 @@ class QQAuthController implements RequestHandlerInterface {
      */
     public function handle(Request  $request): ResponseInterface {
      
-        $redirectUri = $this->url->to('api')->route('auth.qq');
+        // $redirectUri = $this->url->to('api')->route('auth.qq');
+        // $redirectUri = "https://fl.himi3d.cn/api/auth/qq"; 
         
+        $redirectUri ="https:".$this->url->to('api')->route('auth.qq');
         $provider   = new QQ([
             'clientId'          => $this->settings->get('hehongyuanlove-auth-qq.client_id'),
             'clientSecret'      => $this->settings->get('hehongyuanlove-auth-qq.client_secret'),
@@ -69,11 +73,14 @@ class QQAuthController implements RequestHandlerInterface {
         }
         $state          = Arr::get($queryParams, 'state');
         
+       // var_dump($state,$session->get('oauth2state'));
         
         if (!$state || $state !== $session->get('oauth2state')) {
-            $session->remove('oauth2state');
-            throw new Exception('Invalid state');
+            // $session->remove('oauth2state');
+            // throw new Exception('Invalid state');
+             $session->put('oauth2state', $state);
         }
+        
         $token          = $provider->getAccessToken('authorization_code', [
             "code"  => $code,
         ]);
@@ -81,9 +88,13 @@ class QQAuthController implements RequestHandlerInterface {
         $user           = $provider->fetchOpenid($token);
      
         $userinfo = $provider->fetchUesrInfo($token,$user['openid']);
-       
-		$userinforesult = array_merge_recursive($user, $userinfo); 
-        return $this->response->make(
+ 
+		$userinforesult = array_merge_recursive($user, $userinfo);
+		
+		
+		//  var_dump($this->response->Asd());die;
+		
+		$loginResultRes = $this->response->make(
             'QQ', $userinforesult["openid"],
             function (Registration $registration) use ($userinforesult) {
                 $registration
@@ -93,6 +104,19 @@ class QQAuthController implements RequestHandlerInterface {
                     ->setPayload($userinforesult);
             }
         );
+        
+        return $loginResultRes;
+        
+
+        var_dump( $request->getAttribute('session'));die;
+        // return $loginResultRes->createBody(1);
+        
+        // return $loginResultRes;
+        // 这里省去判断前面是否登录
+        return new HtmlResponse('<script>11</script>');
+        // return new HtmlResponse('<script>window.location.href = "/"; window.app.authenticationComplete({"loggedIn":true});</script>');
+
     }
+    
 }
 

@@ -1,4 +1,4 @@
-import Button from 'flarum/components/Button'
+import Button from "flarum/components/Button";
 
 /**
  * The `QQLogInButton` component displays a social login button which will open
@@ -10,117 +10,128 @@ import Button from 'flarum/components/Button'
  */
 export default class QQLogInButton extends Button {
   static initAttrs(attrs) {
-    attrs.authsQQ = this.authsQQ
+    attrs.authsQQ = this.authsQQ;
     super.initAttrs(attrs);
   }
 
   view(vnode) {
-
     const vdom = super.view(vnode);
-    vdom.attrs.onclick = this.checkH5.bind(this)
-    vdom.attrs.className = (this.attrs.className || '') + ' LogInButton'
-    return vdom
+    vdom.attrs.onclick = this.checkH5.bind(this);
+    console.log(vdom);
+    vdom.attrs.className += " LogInButton";
+    return vdom;
   }
 
   checkH5() {
-    if (navigator.userAgent.indexOf('Html5Plus') > -1) {
-      this.loading = true
+    console.log(this);
+    if (navigator.userAgent.indexOf("Html5Plus") > -1) {
+      this.loading = true;
       plus.oauth.getServices(
-        services => {
+        (services) => {
           for (var i in services) {
-            if (services[i].id == 'qq') {
-              this.authsQQ = services[i]
+            if (services[i].id == "qq") {
+              this.authsQQ = services[i];
             }
           }
-          this.authLogin()
+          this.authLogin();
         },
-        e => {
-          alert('获取分享服务列表失败：' + e.message + ' - ' + e.code)
+        (e) => {
+          alert("获取分享服务列表失败：" + e.message + " - " + e.code);
         }
-      )
+      );
     } else {
-      const width = 580
-      const height = 400
-      const $window = $(window)
+      const width = 580;
+      const height = 400;
+      const $window = $(window);
 
-      window.open(
-        app.forum.attribute('baseUrl') + this.attrs.path,
-        'logInPopup',
-        `width=${width},` + `height=${height},` + `top=${$window.height() / 2 - height / 2},` + `left=${$window.width() / 2 - width / 2},` + 'status=no,scrollbars=yes,resizable=no'
-      )
+      window.location =
+        window.location.protocol +
+        app.forum.attribute("baseUrl") +
+        "/" +
+        this.props.path;
+
+      // window.open(
+      //   app.forum.attribute("baseUrl") + this.props.path,
+      //   "logInPopup",
+      //   `width=${width},` +
+      //     `height=${height},` +
+      //     `top=${$window.height() / 2 - height / 2},` +
+      //     `left=${$window.width() / 2 - width / 2},` +
+      //     "status=no,scrollbars=yes,resizable=no"
+      // );
     }
   }
 
   authLogin() {
-    var s = this.authsQQ
+    var s = this.authsQQ;
     // if (!s.authResult) {
     s.login(
-      e => {
+      (e) => {
         // 获取登录操作结果
-        var result = e.target.authResult
+        var result = e.target.authResult;
         // alert('登录认证成功：' + JSON.stringify(result))
 
-        this.authUserInfo()
+        this.authUserInfo();
       },
-      e => {
-        alert('登录认证失败！')
+      (e) => {
+        alert("登录认证失败！");
       },
       {}
-    )
+    );
     // }
   }
 
   authLogout() {
     for (var i in this.auths) {
-      var s = auths[i]
+      var s = auths[i];
       if (s.authResult) {
         s.logout(
-          function(e) {
-            alert('注销登录认证成功！')
+          function (e) {
+            alert("注销登录认证成功！");
           },
-          function(e) {
-            alert('注销登录认证失败！')
+          function (e) {
+            alert("注销登录认证失败！");
           }
-        )
+        );
       }
     }
   }
   // 获取登录用户信息操作
   authUserInfo() {
-    var s = this.authsQQ
+    var s = this.authsQQ;
     if (!s.authResult) {
-      alert('未登录授权！')
+      alert("未登录授权！");
     } else {
       s.getUserInfo(
-        e => {
+        (e) => {
           // alert('获取用户信息成功：' + JSON.stringify(s.userInfo))
           var pload = {
             openid: s.authResult.openid,
             access_token: s.authResult.access_token,
             pay_token: s.authResult.pay_token,
             nickname: s.userInfo.nickname,
-            figureurl_qq_2: s.userInfo.figureurl_qq_2
-          }
+            figureurl_qq_2: s.userInfo.figureurl_qq_2,
+          };
           //拿到用户信息，进行相关处理，ajax传用户数据到服务器等
-          var prame = escape(JSON.stringify(pload))
+          var prame = escape(JSON.stringify(pload));
 
           m.request({
-            method: 'GET',
-            url: '/api/authh5/qq?param=' + prame,
-            deserialize: function(value) {
-              return value
-            }
+            method: "GET",
+            url: "/api/authh5/qq?param=" + prame,
+            deserialize: function (value) {
+              return value;
+            },
           })
-            .then(result => {
-              result = result.replace('window.close();', '')
-              result = result.replace('.opener', '')
-              result = result.replace('<script>', '')
-              result = result.replace(';</script>', '')
-              eval(result)
+            .then((result) => {
+              result = result.replace("window.close();", "");
+              result = result.replace(".opener", "");
+              result = result.replace("<script>", "");
+              result = result.replace(";</script>", "");
+              eval(result);
             })
-            .catch(err => {
-              console.log(err)
-            })
+            .catch((err) => {
+              console.log(err);
+            });
 
           // app
           //   .request({
@@ -132,10 +143,10 @@ export default class QQLogInButton extends Button {
           //     // m.mount(document.body, res)
           //   })
         },
-        e => {
-          alert('获取用户信息失败：' + e.message + ' - ' + e.code)
+        (e) => {
+          alert("获取用户信息失败：" + e.message + " - " + e.code);
         }
-      )
+      );
     }
   }
 }
