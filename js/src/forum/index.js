@@ -4,7 +4,6 @@ import LogInButtons from "flarum/components/LogInButtons";
 import QQLogInButton from "./components/QQLogInButton";
 
 app.initializers.add("hehongyuanlove-auth-qq", () => {
-  console.log("qq");
   extend(LogInButtons.prototype, "items", function (items) {
     items.add(
       "QQAndH5",
