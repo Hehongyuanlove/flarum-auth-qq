@@ -44,14 +44,16 @@ export default class QQLogInButton extends Button {
       const height = 400;
       const $window = $(window);
 
-      window.location =
+      let location =
         window.location.protocol +
         app.forum.attribute("baseUrl") +
         "/" +
         this.props.path;
 
+        window.location.href = location
+
       // window.open(
-      //   app.forum.attribute("baseUrl") + this.props.path,
+      //   location,
       //   "logInPopup",
       //   `width=${width},` +
       //     `height=${height},` +

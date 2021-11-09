@@ -49,10 +49,7 @@ class QQAuthController implements RequestHandlerInterface {
      * @throws Exception
      */
     public function handle(Request  $request): ResponseInterface {
-     
-        // $redirectUri = $this->url->to('api')->route('auth.qq');
-        // $redirectUri = "https://fl.himi3d.cn/api/auth/qq"; 
-        
+             
         $redirectUri ="https:".$this->url->to('api')->route('auth.qq');
         $provider   = new QQ([
             'clientId'          => $this->settings->get('hehongyuanlove-auth-qq.client_id'),
@@ -91,16 +88,17 @@ class QQAuthController implements RequestHandlerInterface {
  
 		$userinforesult = array_merge_recursive($user, $userinfo);
 		
-		
-		//  var_dump($this->response->Asd());die;
+		$actor = $request->getAttribute('actor');
 		
 		$loginResultRes = $this->response->make(
-            'QQ', $userinforesult["openid"],
+            'QQ', $userinforesult["openid"],$actor,
             function (Registration $registration) use ($userinforesult) {
                 $registration
-                    ->suggestEmail("")
+                    // ->suggestEmail(str::upper(str::random(20)) . "@qq.com")
+                    //->suggestUsername($userinforesult["nickname"].str::upper(str::random(4)))
+                    ->provide("username",$userinforesult["nickname"].str::upper(str::random(4)))
+                    ->provide("email","himi3d.".str::upper(str::random(20)) . "@qq.com")
                     ->provideAvatar($userinforesult['figureurl_qq_2'])
-                    ->suggestUsername($userinforesult["nickname"].str::upper(str::random(4)))
                     ->setPayload($userinforesult);
             }
         );
@@ -108,8 +106,6 @@ class QQAuthController implements RequestHandlerInterface {
         return $loginResultRes;
         
 
-        var_dump( $request->getAttribute('session'));die;
-        // return $loginResultRes->createBody(1);
         
         // return $loginResultRes;
         // 这里省去判断前面是否登录
