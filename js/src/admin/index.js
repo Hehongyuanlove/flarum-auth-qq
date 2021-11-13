@@ -3,7 +3,7 @@ import QQSettingsModal from "./components/QQSettingsModal";
 
 app.initializers.add("hehongyuanlove-auth-qq", (app) => {
   // 区分新旧版本
-  let version = app.forum.attribute("version").split(".")[0];
+  let version = app.data.settings.version.split(".")[0];
 
   // 旧版本
   if (version < 1) {
