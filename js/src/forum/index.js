@@ -5,6 +5,7 @@ import QQLogInButton from "./components/QQLogInButton";
 
 app.initializers.add("hehongyuanlove-auth-qq", () => {
   extend(LogInButtons.prototype, "items", function (items) {
+
     items.add(
       "QQAndH5",
       <QQLogInButton
@@ -17,5 +18,7 @@ app.initializers.add("hehongyuanlove-auth-qq", () => {
         )}
       </QQLogInButton>
     );
+    return
+        
   });
 });

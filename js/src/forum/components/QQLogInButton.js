@@ -17,7 +17,6 @@ export default class QQLogInButton extends Button {
   view(vnode) {
     const vdom = super.view(vnode);
     vdom.attrs.onclick = this.checkH5.bind(this);
-    console.log(vdom);
     vdom.attrs.className += " LogInButton";
     return vdom;
   }
@@ -40,18 +39,18 @@ export default class QQLogInButton extends Button {
         }
       );
     } else {
-      const width = 580;
-      const height = 400;
-      const $window = $(window);
+      
 
       let location =
         window.location.protocol +
         app.forum.attribute("baseUrl") +
         "/" +
-        this.props.path;
+        this.attrs.path;
 
         window.location.href = location
 
+      // const width = 580;
+      // const height = 400;
       // window.open(
       //   location,
       //   "logInPopup",
