@@ -41,25 +41,8 @@ export default class QQLogInButton extends Button {
     } else {
       
 
-      let location =
-        window.location.protocol +
-        /*app.forum.attribute("baseUrl") +
-        "/" +*/
-        this.attrs.path;
-
-        window.location.href = location
-
-      // const width = 580;
-      // const height = 400;
-      // window.open(
-      //   location,
-      //   "logInPopup",
-      //   `width=${width},` +
-      //     `height=${height},` +
-      //     `top=${$window.height() / 2 - height / 2},` +
-      //     `left=${$window.width() / 2 - width / 2},` +
-      //     "status=no,scrollbars=yes,resizable=no"
-      // );
+      let location = app.forum.attribute("baseUrl") + "/" + this.attrs.path;
+      window.location.href = location;
     }
   }
 
@@ -133,16 +116,6 @@ export default class QQLogInButton extends Button {
             .catch((err) => {
               console.log(err);
             });
-
-          // app
-          //   .request({
-          //     url: '/api/authh5/qq?param=' + prame,
-          //     method: 'GET'
-          //   })
-          //   .then(res => {
-          //
-          //     // m.mount(document.body, res)
-          //   })
         },
         (e) => {
           alert("获取用户信息失败：" + e.message + " - " + e.code);
