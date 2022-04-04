@@ -43,8 +43,8 @@ export default class QQLogInButton extends Button {
 
       let location =
         window.location.protocol +
-        app.forum.attribute("baseUrl") +
-        "/" +
+        /*app.forum.attribute("baseUrl") +
+        "/" +*/
         this.attrs.path;
 
         window.location.href = location
