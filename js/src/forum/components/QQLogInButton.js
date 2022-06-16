@@ -1,3 +1,4 @@
+import app from "flarum/app";
 import Button from "flarum/components/Button";
 
 /**
@@ -23,44 +24,56 @@ export default class QQLogInButton extends Button {
 
   checkH5() {
     console.log(this);
-    if (navigator.userAgent.indexOf("Html5Plus") > -1) {
-      this.loading = true;
-      plus.oauth.getServices(
-        (services) => {
-          for (var i in services) {
-            if (services[i].id == "qq") {
-              this.authsQQ = services[i];
-            }
-          }
-          this.authLogin();
-        },
-        (e) => {
-          alert("获取分享服务列表失败：" + e.message + " - " + e.code);
-        }
-      );
-    } else {
+    const width = 600;
+    const height = 400;
+    const $window = $(window);
+
+    window.open(`${app.forum.attribute('apiUrl')}/auth/qq`, `LinkPopup`,
+        `width=${width},` +
+        `height=${height},` +
+        `top=${$window.height() / 2 - height / 2},` +
+        `left=${$window.width() / 2 - width / 2},` +
+        'status=no,scrollbars=no,resizable=no');
+
+    this.loading = true;
+    // if (navigator.userAgent.indexOf("Html5Plus") > -1) {
+    //   this.loading = true;
+    //   plus.oauth.getServices(
+    //     (services) => {
+    //       for (var i in services) {
+    //         if (services[i].id == "qq") {
+    //           this.authsQQ = services[i];
+    //         }
+    //       }
+    //       this.authLogin();
+    //     },
+    //     (e) => {
+    //       alert("获取分享服务列表失败：" + e.message + " - " + e.code);
+    //     }
+    //   );
+    // } else {
       
 
-      let location =
-        window.location.protocol +
-        app.forum.attribute("baseUrl") +
-        "/" +
-        this.attrs.path;
+    //   let location =
+    //     window.location.protocol +
+    //     app.forum.attribute("baseUrl") +
+    //     "/" +
+    //     this.attrs.path;
 
-        window.location.href = location
+    //     window.location.href = location
 
-      // const width = 580;
-      // const height = 400;
-      // window.open(
-      //   location,
-      //   "logInPopup",
-      //   `width=${width},` +
-      //     `height=${height},` +
-      //     `top=${$window.height() / 2 - height / 2},` +
-      //     `left=${$window.width() / 2 - width / 2},` +
-      //     "status=no,scrollbars=yes,resizable=no"
-      // );
-    }
+    //   // const width = 580;
+    //   // const height = 400;
+    //   // window.open(
+    //   //   location,
+    //   //   "logInPopup",
+    //   //   `width=${width},` +
+    //   //     `height=${height},` +
+    //   //     `top=${$window.height() / 2 - height / 2},` +
+    //   //     `left=${$window.width() / 2 - width / 2},` +
+    //   //     "status=no,scrollbars=yes,resizable=no"
+    //   // );
+    // }
   }
 
   authLogin() {

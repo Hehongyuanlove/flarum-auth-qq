@@ -36,6 +36,8 @@ class QQResponseFactory
     
     public function make(string $provider, string $identifier,User $actor, callable $configureRegistration): ResponseInterface
     {
+
+        var_dump("QQResponseFactory");
         if ($user = LoginProvider::logIn($provider, $identifier)) {
             return $this->makeLoggedInResponse($user);
         }

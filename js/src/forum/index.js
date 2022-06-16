@@ -11,7 +11,6 @@ app.initializers.add("hehongyuanlove-auth-qq", () => {
       <QQLogInButton
         className="Button LogInButton--QQ"
         icon="fab fa-qq"
-        path="/api/auth/qq"
       >
         {app.translator.trans(
           "hehongyuanlove-auth-qq.forum.log_in.with_qq_button"
