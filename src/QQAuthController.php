@@ -18,9 +18,9 @@ use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\JsonResponse;
 
 // 临时日志
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
-use Monolog\Handler\StreamHandler;
+// use Monolog\Logger;
+// use Psr\Log\LoggerInterface;
+// use Monolog\Handler\StreamHandler;
 
 class QQAuthController implements RequestHandlerInterface
 {
@@ -54,8 +54,8 @@ class QQAuthController implements RequestHandlerInterface
         $this->response = $response;
         $this->settings = $settings;
         $this->url      = $url;
-        $this->logger = new Logger('qqAuth');
-        $this->logger->pushHandler(new StreamHandler("../storage/qqauth.log", Logger::INFO));
+        // $this->logger = new Logger('qqAuth');
+        // $this->logger->pushHandler(new StreamHandler("../storage/qqauth.log", Logger::INFO));
     }
 
 
@@ -100,7 +100,6 @@ class QQAuthController implements RequestHandlerInterface
         $state          = Arr::get($queryParams, 'state');
         // $this->logger->log(Logger::WARNING, '[有code]:'.$request->getUri());
 
-        // var_dump($state,$session->get('oauth2state'));
 
         if (!$state || $state !== $session->get('oauth2state')) {
             // $session->remove('oauth2state');
@@ -118,8 +117,7 @@ class QQAuthController implements RequestHandlerInterface
 
         $userinforesult = array_merge_recursive($user, $userinfo);
 
-        // $actor = $request->getAttribute('actor');
-        $this->logger->log(Logger::WARNING, '[记录]:'.json_encode($userinforesult));
+        // $this->logger->log(Logger::WARNING, '[记录]:'.json_encode($userinforesult));
         $loginResultRes = $this->response->make(
             'QQ',
             $userinforesult["openid"],
