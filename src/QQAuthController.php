@@ -69,7 +69,6 @@ class QQAuthController implements RequestHandlerInterface
 
         // 增加判断 假如已经登陆了 跳转到 /
         $actor = $request->getAttribute('actor');
-        // var_dump($actor->isGuest());
 
         if(!$actor->isGuest()){
            return  new RedirectResponse($this->url->to('forum')->base());
@@ -90,7 +89,6 @@ class QQAuthController implements RequestHandlerInterface
         $code           = Arr::get($queryParams, 'code');
 
         // 写日志 检查 code 情况
-
         if (!$code) {
             $authUrl    = $provider->getAuthorizationUrl();
             $session->put('oauth2state', $provider->getState());
@@ -126,21 +124,13 @@ class QQAuthController implements RequestHandlerInterface
                     // ->suggestEmail(str::upper(str::random(20)) . "@qq.com")
                     //->suggestUsername($userinforesult["nickname"].str::upper(str::random(4)))
                     ->provide("username",  $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4)))
-                    ->provide("email", "himi3d." . str::upper(str::random(20)) . "@qq.com")
+                    // ->provide("email", "himi3d." . str::upper(str::random(20)) . "@qq.com")
                     ->provideAvatar($userinforesult['figureurl_qq_2'])
                     ->setPayload($userinforesult);
             }
         );
 
         return $loginResultRes;
-
-
-
-        // // return $loginResultRes;
-        // // 这里省去判断前面是否登录
-        // return new HtmlResponse('<script>11</script>');
-        // // return new HtmlResponse('<script>window.location.href = "/"; window.app.authenticationComplete({"loggedIn":true});</script>');
-
     }
 
     public function UserNameMatch($str)
