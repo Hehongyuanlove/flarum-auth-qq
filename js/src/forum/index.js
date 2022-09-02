@@ -2,6 +2,7 @@ import { extend } from "flarum/extend";
 import app from "flarum/app";
 import LogInButtons from "flarum/components/LogInButtons";
 import QQLogInButton from "./components/QQLogInButton";
+import AuthQQPage from "./components/AuthQQPage"
 
 app.initializers.add("hehongyuanlove-auth-qq", () => {
   extend(LogInButtons.prototype, "items", function (items) {
@@ -18,6 +19,11 @@ app.initializers.add("hehongyuanlove-auth-qq", () => {
       </QQLogInButton>
     );
     return
-        
+
   });
+
+  app.routes['hhy-auth-qq'] = {
+    path: '/auth/qq',
+    component: AuthQQPage,
+  };
 });
