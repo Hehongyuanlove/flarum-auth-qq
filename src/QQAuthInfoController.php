@@ -112,9 +112,9 @@ class QQAuthInfoController implements RequestHandlerInterface
             function (Registration $registration) use ($userinforesult) {
                 $registration
                 // ->suggestEmail(str::upper(str::random(20)) . "@qq.com")
-                //->suggestUsername($userinforesult["nickname"].str::upper(str::random(4)))
-                ->provide("username", $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4)))
-                    ->provide("email", "himi3d." . str::upper(str::random(20)) . "@qq.com")
+                ->suggestUsername($userinforesult["nickname"].str::upper(str::random(4)))
+                // ->provide("username", $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4)))
+                //    ->provide("email", "himi3d." . str::upper(str::random(20)) . "@qq.com")
                     ->provideAvatar($userinforesult['figureurl_qq_2'])
                     ->setPayload($userinforesult);
             }
