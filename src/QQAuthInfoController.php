@@ -113,11 +113,11 @@ class QQAuthInfoController implements RequestHandlerInterface
                 $registration
                 // ->suggestEmail(str::upper(str::random(20)) . "@qq.com")
                 //->suggestUsername($userinforesult["nickname"].str::upper(str::random(4)))
-                //->suggestUsername($userinforesult["nickname"])
-                // ->provide("email", "himi3d." . $pwd . "@qq.com")
+                // ->provide("username", $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4)))
+                // ->provide("email", "himi3d." . str::upper(str::random(20)) . "@qq.com")
                 // ->provide("password", $pwd)
-                    ->provideAvatar($userinforesult['figureurl_qq_2'])
-                    ->setPayload($userinforesult);
+                ->provideAvatar($userinforesult['figureurl_qq_2'])
+                ->setPayload($userinforesult);
             }
         );
 
