@@ -25,12 +25,14 @@ export default class AuthQQModal extends Modal {
             console.log("result", result)
             // 区分登录与注册
             if (result.token || result.loggedIn) {
+                // 打开弹窗的
                 if (window.opener) {
-                    window.close(); window.opener.app.authenticationComplete(result);
-                } else {
-                    this.hide();
-                    app.authenticationComplete(result);
+                    window.opener.app.authenticationComplete(result);
+                    window.close();
+                    return
                 }
+                app.authenticationComplete(result);
+                window.location.href = app.forum.attribute('baseUrl')
                 return
             } else {
                 //返回信息 可能超出范围
