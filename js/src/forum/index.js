@@ -1,23 +1,46 @@
 import { extend } from "flarum/extend";
 import app from "flarum/app";
+
+import SettingsPage from 'flarum/components/SettingsPage';
 import LogInButtons from "flarum/components/LogInButtons";
-import QQLogInButton from "./components/QQLogInButton";
+import LogInButton from 'flarum/components/LogInButton';
+import Button from 'flarum/components/Button';
+
+import UnlinkModal from "./components/UnLinkModal";
+import LinkModal from "./components/LinkModal";
+import config from '../config';
 
 app.initializers.add("hehongyuanlove-auth-qq", () => {
-  extend(LogInButtons.prototype, "items", function (items) {
+  
+  extend(SettingsPage.prototype, 'accountItems', (items) => {
+    const {
+        data: {
+            attributes: {
+                QQAuth: {
+                    isLinked = false
+                },
+            },
+        },
+    } = app.session.user;
 
-    items.add(
-      "QQAndH5",
-      <QQLogInButton
-        className="Button LogInButton--QQ"
-        icon="fab fa-qq"
-      >
-        {app.translator.trans(
-          "hehongyuanlove-auth-qq.forum.log_in.with_qq_button"
-        )}
-      </QQLogInButton>
+    items.add(`link${config.module.id}`,
+        <Button className={`Button ${config.module.id}Button--${isLinked ? 'danger' : 'success'}`} icon={config.module.icon}
+            path={`/auth/${name}`} onclick={() => app.modal.show(isLinked ? UnlinkModal : LinkModal)}>
+            {app.translator.trans(`${config.module.name}.forum.buttons.${isLinked ? 'unlink' : 'link'}`)}
+        </Button>
     );
-    return
-        
+});
+  
+  
+  extend(LogInButtons.prototype, 'items', (items) => {
+    items.add(config.package.id,
+        <LogInButton
+            className={`Button LogInButton--${config.module.id}`}
+            icon={config.module.icon}
+            path={config.api.uri}>
+            {app.translator.trans(`${config.module.name}.forum.log_in.with_qq_button`)}
+        </LogInButton>
+    );
   });
+
 });
