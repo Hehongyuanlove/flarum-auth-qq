@@ -1,7 +1,7 @@
 {
   "name": "hehongyuanlove/flarum-auth-qq",
   "description": "Allow users to log in with QQ",
-  "version": "2.3",
+  "version": "2.4",
   "keywords": [
     "flarum",
     "authentication",
