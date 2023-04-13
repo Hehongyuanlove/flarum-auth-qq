@@ -4,23 +4,24 @@
 
 A [Flarum](http://flarum.org) extension. Allow users to log in with QQ
 ### 重要说明
-- 本拓展未对QQ用户名进行规范(允许汉字)
-- 本拓展会自动设置邮箱账号 同时密码也为邮箱账号 且自动激活邮箱
+- 用户名进行规范(允许汉字)
+- 随机生成用户名
+- 自动设置邮箱账号 同时密码也为邮箱账号 且自动激活邮箱
+- 邮箱与密码相同
 
 ### 关于注册时邮箱用户名部分
 > 有其他需求 自行修改vendor/hehongyuanlove/flarum-auth-qq/src/QQAuthController.php
 ```
-    # 随机邮箱
-    $random_email = "xxxx." . str::upper(str::random(20)) . "@xxxxx.cn";
-    # 随机用户名
-    $username     = $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4));
-    
+    $username = $this->RandomUserName();
+    $random_email = $username. "@xxxxx.cn";
+    $nickname     = $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4));
+
     $registration
-        ->provide("username", $username)        # 设置用户名
-        ->provide("nickname", $username)        # 设置昵称
-        ->provide("email", $random_email)       # 设置邮箱
-        ->provide("is_email_confirmed", 1)      # 设置邮箱激活
-        ->provide("password", $random_email)    # 设置密码
+        ->provide("username", $username)
+        ->provide("nickname", $nickname)
+        ->provide("email", $random_email)
+        ->provide("is_email_confirmed", 1)
+        ->provide("password", $random_email)
         ->provideAvatar($userinforesult['figureurl_qq_2'])
         ->setPayload($userinforesult);
 

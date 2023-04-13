@@ -132,11 +132,13 @@ class QQAuthController implements RequestHandlerInterface
             $userinforesult["openid"],
             $request->getAttribute('actor'),
             function (Registration $registration) use ($userinforesult) {
-                $random_email = "xxxx." . str::upper(str::random(20)) . "@xxxxx.cn";
-                $username     = $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4));
+                $username = $this->RandomUserName();
+                $random_email = $username. "@xxxxx.cn";
+                $nickname     = $this->UserNameMatch($userinforesult["nickname"]) . str::upper(str::random(4));
+
                 $registration
                     ->provide("username", $username)
-                    ->provide("nickname", $username)
+                    ->provide("nickname", $nickname)
                     ->provide("email", $random_email)
                     ->provide("is_email_confirmed", 1)
                     ->provide("password", $random_email)
@@ -172,5 +174,12 @@ class QQAuthController implements RequestHandlerInterface
 
         return new HtmlResponse($content);
 
+    }
+
+    public function RandomUserName()
+    {
+        $timestamp = date('YmdHis'); // 生成与当前时间相关的字符串
+        $random = substr(str_shuffle(str_repeat('abcdefghijklmnopqrstuvwxyz_-', 5)), 0, 10); // 生成长度为 10 的随机字符串
+        return $random . $timestamp ; // 将两个字符串拼接起来
     }
 }
