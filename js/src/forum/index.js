@@ -33,7 +33,7 @@ app.initializers.add("hehongyuanlove-auth-qq", () => {
   
   
   extend(LogInButtons.prototype, 'items', (items) => {
-    items.add(config.package.id,
+    items.add(config.module.id,
         <LogInButton
             className={`Button LogInButton--${config.module.id}`}
             icon={config.module.icon}
