@@ -34,6 +34,10 @@ app.initializers.add("hehongyuanlove-auth-qq", (app) => {
         type: "text",
       },
       30
-    );
+    ).registerSetting({
+      setting: 'hehongyuanlove-auth-qq.close_email_register',
+      type: 'switch',
+      label: "关闭邮箱注册"
+    });
   return;
 });

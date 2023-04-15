@@ -15,35 +15,49 @@ use Flarum\Extend;
 use Flarum\Api\Serializer\UserSerializer;
 
 return [
-  (new Extend\Frontend('forum'))
-    ->js(__DIR__ . '/js/dist/forum.js')
-    ->css(__DIR__ . '/resources/less/forum.less'),
-  (new Extend\Frontend('admin'))
-    ->js(__DIR__ . '/js/dist/admin.js')
-    ->css(__DIR__ . '/resources/less/admin.less'),
+    (new Extend\Frontend('forum'))
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/resources/less/forum.less'),
+    (new Extend\Frontend('admin'))
+        ->js(__DIR__ . '/js/dist/admin.js')
+        ->css(__DIR__ . '/resources/less/admin.less'),
 
-  new Extend\Locales(__DIR__ . '/resources/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
 
-  (new Extend\Routes('api'))
-    ->get('/auth/qq', 'auth.qq', QQAuthController::class),
-  
-  (new Extend\Routes('api'))
-    ->get('/auth/qq/link', 'auth.qq.link', QQLinkController::class)
-    ->post('/auth/qq/unlink', 'auth.qq.unlink', QQUnLinkController::class),
+    (new Extend\Routes('api'))
+        ->get('/auth/qq', 'auth.qq', QQAuthController::class),
 
+    (new Extend\Routes('api'))
+        ->get('/auth/qq/link', 'auth.qq.link', QQLinkController::class)
+        ->post('/auth/qq/unlink', 'auth.qq.unlink', QQUnLinkController::class),
 
-  (new Extend\ApiSerializer(UserSerializer::class))
-      ->attributes(function($serializer, $user, $attributes) {
+    (new Extend\ApiSerializer(UserSerializer::class))
+        ->attributes(function ($serializer, $user, $attributes) {
 
-        $loginProviders = $user->loginProviders();
-        $steamProvider = $loginProviders->where('provider', 'QQ')->first();
+            $loginProviders = $user->loginProviders();
+            $steamProvider  = $loginProviders->where('provider', 'QQ')->first();
 
-        $attributes['QQAuth'] = [
-            'isLinked' => $steamProvider !== null,
-            'identifier' => null, // Hidden, don't expose this information
-            'providersCount' => $loginProviders->count()
-        ];
+            $attributes['QQAuth'] = [
+                'isLinked'   => $steamProvider !== null,
+                'identifier' => null, // Hidden, don't expose this information
+                'providersCount' => $loginProviders->count(),
+            ];
 
-        return $attributes;
-    }),
-];
+            return $attributes;
+        }),
+    
+    // add settings
+    (new Extend\Settings)
+        ->serializeToForum('removeEmailRegister', 'hehongyuanlove-auth-qq.close_email_register', 'boolval'),
+
+    // remove api user create
+    (new Extend\Routes('api'))
+        ->remove('users.create')
+        ->post('/users','users.create.disable', DisableApiController::class)
+        ,
+    // remove register
+    (new Extend\Routes('forum'))
+        ->remove('register')
+        ->post('/register','register', DisableController::class)
+        ,
+    ];
